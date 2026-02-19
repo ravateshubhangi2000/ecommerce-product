@@ -43,10 +43,15 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   bloc: ^9.2.0
   flutter_svg: ^2.2.3
+  hive_ce: ^2.19.1
+  hive_ce_flutter: ^2.3.4
+  internet_connection_checker_plus: ^2.9.1+2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_ce_generator: ^1.11.1
+  build_runner: ^2.4.8
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
