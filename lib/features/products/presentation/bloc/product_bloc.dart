@@ -76,11 +76,22 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<FilterProductsByCategoryEvent>(_onFilterProductsByCategory);
   }
 
+  String _mapFailureToMessage(dynamic failure) {
+    if (failure.runtimeType.toString() == 'ServerFailure') {
+      return 'Oops! Something went wrong on the server.';
+    } else if (failure.runtimeType.toString() == 'ConnectionFailure') {
+      return 'No Internet Connection. Please check your settings.';
+    } else if (failure.runtimeType.toString() == 'CacheFailure') {
+      return 'No cached data found.';
+    }
+    return 'Unexpected Error';
+  }
+
   void _onGetProducts(GetProductsEvent event, Emitter<ProductState> emit) async {
     emit(ProductLoading());
     final failureOrProducts = await getProducts(NoParams());
     failureOrProducts.fold(
-      (failure) => emit(const ProductError('Server Failure')),
+      (failure) => emit(ProductError(_mapFailureToMessage(failure))),
       (products) => emit(ProductLoaded(products)),
     );
   }
@@ -93,7 +104,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     }
     final failureOrProducts = await searchProducts(SearchProductsParams(query: event.query));
     failureOrProducts.fold(
-      (failure) => emit(const ProductError('Server Failure')),
+      (failure) => emit(ProductError(_mapFailureToMessage(failure))),
       (products) => emit(ProductLoaded(products)),
     );
   }
@@ -106,7 +117,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     }
     final failureOrProducts = await getProductsByCategory(GetProductsByCategoryParams(category: event.category));
     failureOrProducts.fold(
-      (failure) => emit(const ProductError('Server Failure')),
+      (failure) => emit(ProductError(_mapFailureToMessage(failure))),
       (products) => emit(ProductLoaded(products)),
     );
   }
